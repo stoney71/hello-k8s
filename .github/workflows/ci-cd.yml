@@ -53,4 +53,4 @@ jobs:
           $env:KUBECONFIG="${{ github.workspace }}\kubeconfig"
           kubectl config view
           kubectl get nodes
-          helm upgrade --install hello-k8s . -n demo --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/hello-k8s --set image.tag=${{ needs.build.outputs.tag }}
+          helm upgrade --install hello-k8s ./hello-k8s -n demo --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/hello-k8s --set image.tag=${{ needs.build.outputs.tag }}
