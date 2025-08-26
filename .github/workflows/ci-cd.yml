@@ -38,9 +38,19 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Write kubeconfig
+        run: |
+          $env:KUBECONFIG="${{ github.workspace }}\kubeconfig"
+          [System.Text.Encoding]::UTF8.GetString(
+            [System.Convert]::FromBase64String("${{ secrets.KUBECONFIG_DATA }}")
+          ) | Out-File -FilePath $env:KUBECONFIG -Encoding utf8
+          
       - name: Deploy with Helm
         run: |
           $env:KUBECONFIG="${{ github.workspace }}\kubeconfig"
-          [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("${{ secrets.KUBECONFIG_DATA }}")) | Out-File -FilePath $env:KUBECONFIG -Encoding utf8
+          kubectl config view
+          kubectl get nodes
           helm upgrade --install hello-k8s ./hello-k8s -n demo --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/hello-k8s --set image.tag=${{ needs.build.outputs.tag }}
