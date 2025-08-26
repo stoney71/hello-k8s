@@ -8,7 +8,7 @@ on:
 jobs:
   # --- CI job: build & push image ---
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.vars.outputs.TAG }}
     steps:
@@ -36,7 +36,7 @@ jobs:
   # --- CD job: deploy with Helm ---
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
 
