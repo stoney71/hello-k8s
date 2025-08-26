@@ -42,5 +42,5 @@ jobs:
       - name: Deploy with Helm
         run: |
           $env:KUBECONFIG="${{ github.workspace }}\kubeconfig"
-          kubectl config view
+          [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("${{ secrets.KUBECONFIG_DATA }}")) | Out-File -FilePath $env:KUBECONFIG -Encoding utf8
           helm upgrade --install hello-k8s ./hello-k8s -n demo --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/hello-k8s --set image.tag=${{ needs.build.outputs.tag }}
