@@ -39,10 +39,5 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-
       - name: Deploy with Helm
-        shell: bash
-        run: |
-          helm upgrade --install hello-k8s ./hello-k8s -n demo \
-            --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/hello-k8s \
-            --set image.tag=${{ needs.build.outputs.tag }}
+        run: helm upgrade --install hello-k8s ./hello-k8s -n demo --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/hello-k8s --set image.tag=${{ needs.build.outputs.tag }}
